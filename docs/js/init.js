@@ -12,8 +12,10 @@ import { switchPage as switchToPageNotFound } from "./404/404.controller.js";
 import { switchPage as switchToViewPage } from "./view/view.controller.js";
 import { switchPage as switchToPalettesPage } from "./palettes/palettes.controller.js";
 import { switchPage as switchToEditPalettePage } from "./palettes/edit-palette.controller.js";
+const ROOT_PATH = '/my-life-in-colors';
 function init(url, parameters = new URLSearchParams()) {
     return __awaiter(this, void 0, void 0, function* () {
+        url = url.replace(ROOT_PATH, '');
         if (url.match(/\/palettes\/add\/?/)) {
             return yield switchToEditPalettePage(-1);
         }
@@ -29,7 +31,7 @@ function init(url, parameters = new URLSearchParams()) {
             //return await switchToDiariesPage(user);
         }
         let day = parameters.get('day') || '';
-        if (url === '/') {
+        if (url === '/' || url === '/index.html') {
             url = '/view/';
         }
         if (['/view/'].indexOf(url) >= 0 && !isDateStringValid(day)) {
@@ -39,12 +41,13 @@ function init(url, parameters = new URLSearchParams()) {
         if (url === '/' || url === '/view/') {
             return yield switchToViewPage();
         }
+        console.error('Unknown url:', url, parameters.toString());
         return yield switchToPageNotFound();
     });
 }
 function redirectTo(url, parameters = new URLSearchParams()) {
     return __awaiter(this, void 0, void 0, function* () {
-        history.pushState({}, '', `${url}?${parameters.toString()}`);
+        history.pushState({}, '', `${ROOT_PATH}${url}?${parameters.toString()}`);
         return init(url, parameters);
     });
 }

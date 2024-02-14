@@ -5,7 +5,10 @@ import { switchPage as switchToViewPage } from "./view/view.controller.js";
 import { switchPage as switchToPalettesPage } from "./palettes/palettes.controller.js";
 import { switchPage as switchToEditPalettePage } from "./palettes/edit-palette.controller.js";
 
+const ROOT_PATH = '/my-life-in-colors';
 async function init(url: string, parameters: URLSearchParams = new URLSearchParams()): Promise<void> {
+  url = url.replace(ROOT_PATH, '');
+
   if (url.match(/\/palettes\/add\/?/)) {
     return await switchToEditPalettePage(-1);
   }
@@ -26,7 +29,7 @@ async function init(url: string, parameters: URLSearchParams = new URLSearchPara
 
   let day = parameters.get('day') || '';
 
-  if (url === '/') {
+  if (url === '/' || url === '/index.html') {
     url = '/view/';
   }
 
@@ -39,11 +42,12 @@ async function init(url: string, parameters: URLSearchParams = new URLSearchPara
     return await switchToViewPage();
   }
 
+  console.error('Unknown url:', url, parameters.toString())
   return await switchToPageNotFound();
 }
 
 async function redirectTo(url: string, parameters: URLSearchParams = new URLSearchParams()): Promise<void> {
-  history.pushState({}, '', `${url}?${parameters.toString()}`);
+  history.pushState({}, '', `${ROOT_PATH}${url}?${parameters.toString()}`);
   return init(url, parameters);
 }
 
