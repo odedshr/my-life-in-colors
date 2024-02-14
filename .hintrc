@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "compat-api/html": [
+      "default",
+      {
+        "ignore": [
+          "script[type=module]",
+          "input[type=date]",
+          "input[type=color]"
+        ]
+      }
+    ],
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "display: grid",
+          "grid-template-columns",
+          "grid-template-rows"
+        ]
+      }
+    ]
+  }
+}

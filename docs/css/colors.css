@@ -1,0 +1,17 @@
+:root {
+  /* define a palette of 5 colors css vars */
+  --color-pink: #F06A8A;
+  --color-blue: #8FBDDF;
+  --color-yellow: #FAE360;
+  --color-gray: #ABB5BE;
+  --color-dark-gray: #6C757D;
+  --color-orange: #F48E35;
+  --color-white: #FFFFFF;
+  --color-green: #22BA28;
+
+  --color-background: var(--color-white);
+  --color-background-secondary: var(--color-yellow);
+  --color-border: var(--color-gray);
+  --color-button: var(--color-green);
+  --color-primary: var(--color-dark-gray);
+}

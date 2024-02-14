@@ -1,0 +1,29 @@
+{
+  "name": "my-life-in-colors",
+  "version": "1.0.0",
+  "description": "A simple app that let you color each day in your life",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/odedshr/my-life-in-colors.git"
+  },
+  "author": "Oded Sharon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/odedshr/my-life-in-colors/issues"
+  },
+  "homepage": "https://github.com/odedshr/my-life-in-colors#readme",
+  "dependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^24.0.0",
+    "nano-jsx": "^0.1.0",
+    "typescript": "^5.3.3"
+  }
+}
