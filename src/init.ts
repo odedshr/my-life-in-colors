@@ -9,14 +9,11 @@ const ROOT_PATH = '/my-life-in-colors';
 async function init(url: string, parameters: URLSearchParams = new URLSearchParams()): Promise<void> {
   url = url.replace(ROOT_PATH, '');
 
-  if (url.match(/\/palettes\/add\/?/)) {
-    return await switchToEditPalettePage(-1);
-  }
 
-  if (url.match(/\/palettes\/?/)) {
+  if (url.match(/\/palettes\.html\/?/)) {
     const index = parameters.get('i');
     if (index) {
-      return await switchToEditPalettePage(+index);
+      return await switchToEditPalettePage(isNaN(+index) ? -1 : +index);
     }
 
     return await switchToPalettesPage();
@@ -30,15 +27,15 @@ async function init(url: string, parameters: URLSearchParams = new URLSearchPara
   let day = parameters.get('day') || '';
 
   if (url === '/' || url === '/index.html') {
-    url = '/view/';
+    url = '/index.html';
   }
 
-  if (['/view/'].indexOf(url) >= 0 && !isDateStringValid(day)) {
+  if (['/index.html'].indexOf(url) >= 0 && !isDateStringValid(day)) {
     parameters.set('day', getFormattedDate(new Date()));
     return await redirectTo(url, parameters);
   }
 
-  if (url === '/' || url === '/view/') {
+  if (url === '/index.html') {
     return await switchToViewPage();
   }
 

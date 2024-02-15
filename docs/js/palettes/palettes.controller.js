@@ -4,9 +4,9 @@ import { redirectTo } from '../init.js';
 function switchPage() {
     const palettes = getPalettes();
     if (palettes.length === 0) {
-        redirectTo('/palettes/add');
+        redirectTo(`${location.pathname}?i=add`);
     }
-    const onAddItemRequested = () => redirectTo('/palettes/add');
+    const onAddItemRequested = () => redirectTo(`${location.pathname}?i=add`);
     appendChild(document.body, { onAddItemRequested, palettes });
 }
 export { switchPage };

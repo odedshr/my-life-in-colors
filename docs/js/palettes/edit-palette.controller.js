@@ -15,9 +15,9 @@ function switchPage(paletteIndex) {
     const palette = getPalette(palettes, paletteIndex);
     const onSubmitted = (palette) => {
         setPalettes([...palettes.slice(0, paletteIndex), palette, ...palettes.slice(paletteIndex + 1)]);
-        redirectTo('/palettes/');
+        redirectTo('/palettes.html');
     };
-    const onCancel = () => redirectTo('/palettes/');
+    const onCancel = () => redirectTo('/palettes.html');
     appendChild(document.body, { onSubmitted, onCancel, palette });
 }
 export { switchPage };

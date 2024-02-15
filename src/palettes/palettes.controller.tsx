@@ -7,10 +7,10 @@ function switchPage() {
   const palettes: Palette[] = getPalettes();
 
   if (palettes.length === 0) {
-    redirectTo('/palettes/add');
+    redirectTo(`${location.pathname}?i=add`);
   }
 
-  const onAddItemRequested: () => void = () => redirectTo('/palettes/add');
+  const onAddItemRequested: () => void = () => redirectTo(`${location.pathname}?i=add`);
 
   appendChild(document.body, { onAddItemRequested, palettes });
 }

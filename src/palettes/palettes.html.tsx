@@ -17,7 +17,7 @@ const Element: ElementType<Props> = (props) => {
       <ul class="palette-list">
         {props.palettes.map((palette, i) => (
           <li class="palette-item">
-            <a {...{ href: `/palettes/?i=${i}` }} class="palette-link">{palette.name}</a>
+            <a {...{ href: `${location.pathname}?i=${i}` }} class="palette-link">{palette.name}</a>
             <ul class="colors">
               {palette.colors.map(color => <li class="color" {...{ style: `--color: ${color.hex}`, title: color.name }}>&nbsp;</li>)}
             </ul>

@@ -16,13 +16,10 @@ const ROOT_PATH = '/my-life-in-colors';
 function init(url, parameters = new URLSearchParams()) {
     return __awaiter(this, void 0, void 0, function* () {
         url = url.replace(ROOT_PATH, '');
-        if (url.match(/\/palettes\/add\/?/)) {
-            return yield switchToEditPalettePage(-1);
-        }
-        if (url.match(/\/palettes\/?/)) {
+        if (url.match(/\/palettes\.html\/?/)) {
             const index = parameters.get('i');
             if (index) {
-                return yield switchToEditPalettePage(+index);
+                return yield switchToEditPalettePage(isNaN(+index) ? -1 : +index);
             }
             return yield switchToPalettesPage();
         }
@@ -32,13 +29,13 @@ function init(url, parameters = new URLSearchParams()) {
         }
         let day = parameters.get('day') || '';
         if (url === '/' || url === '/index.html') {
-            url = '/view/';
+            url = '/index.html';
         }
-        if (['/view/'].indexOf(url) >= 0 && !isDateStringValid(day)) {
+        if (['/index.html'].indexOf(url) >= 0 && !isDateStringValid(day)) {
             parameters.set('day', getFormattedDate(new Date()));
             return yield redirectTo(url, parameters);
         }
-        if (url === '/' || url === '/view/') {
+        if (url === '/index.html') {
             return yield switchToViewPage();
         }
         console.error('Unknown url:', url, parameters.toString());
