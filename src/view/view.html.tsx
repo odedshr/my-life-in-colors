@@ -41,7 +41,7 @@ const Element: ElementType<Props> = (props) => {
       {props.months.map((month, i) => MonthView({ month }))}
     </article>
     <footer>
-      <button>Add Status</button>
+      <button>Add Status</button> | <a href="palettes.html">Edit Palettes</a>
     </footer>
   </main>)
 };

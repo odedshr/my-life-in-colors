@@ -8,7 +8,7 @@ type Props = {
 
 const Element: ElementType<Props> = (props) => (<form class="page palettes">
   <header>
-    <h1 class="app-name">My Life In Color</h1>
+    <h1 class="app-name">Palettes</h1>
   </header>
   <article>
     <ul class="palette-list">
@@ -22,7 +22,7 @@ const Element: ElementType<Props> = (props) => (<form class="page palettes">
     </ul>
   </article>
   <footer>
-    <button onClick={props.onAddItemRequested}>Add Palette</button>
+    <a href="index.html">Back</a> | <button onClick={props.onAddItemRequested}>Add Palette</button>
   </footer>
 </form>);
 
