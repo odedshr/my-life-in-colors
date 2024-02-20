@@ -19,7 +19,12 @@ function getPalettes(): Palettes {
   const items = JSON.parse(localStorage.getItem('palettes') || defaultValue) as Palette[];
   const map: { [key: string]: Palette } = {};
   const current = getCurrentPaletteId();
-  items.forEach(item => map[item.id] = item);
+  items.forEach(item => {
+    if (!item.id) {
+      item.id = item.name.toLowerCase().replace(/ /g, '-');
+    }
+    map[item.id] = item;
+  });
   return {
     items, map, current: map[current] || items[0] || null
   }
@@ -30,7 +35,7 @@ function setPalettes(palettes: Palette[]) {
 }
 
 function getCurrentPaletteId() {
-  return localStorage.getItem('currentPaletteId') || 'example';
+  return localStorage.getItem('currentPaletteId') || 'running';
 }
 
 function setCurrentPaletteId(id: string) {
