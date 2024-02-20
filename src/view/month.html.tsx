@@ -1,5 +1,5 @@
-import { Month, Day } from '../types.js';
-import { isFirstDateBeforeSecondDate } from '../utils/date-utils.js';
+import { Month } from '../types.js';
+import { getFormattedDate, isFirstDateBeforeSecondDate } from '../utils/date-utils.js';
 
 type ElementType = (props: {
   month: Month
@@ -11,10 +11,10 @@ function getWeekdayNameLetter(date: Date) {
 
 const today = new Date();
 
-function getAttributes(day: Day) {
+function getAttributes(day: { date: Date, hex: string }) {
   return {
     class: `data-item${isFirstDateBeforeSecondDate(today, day.date) ? ' data-item-future' : ''}`,
-    style: `--circle-color: ${day.colorValue};`,
+    style: `--circle-color: ${day.hex};`,
     datetime: day.date.toISOString()
   };
 }
@@ -37,7 +37,10 @@ const Element: ElementType = (props) => {
         <tbody>
           {props.month.weeks.map((week, i) => (
             <tr>
-              {week.map(day => (<td>{day.date.getMonth() === monthValue ? (<time {...getAttributes(day)}>&nbsp;</time>) : ''}</td>))}
+              {week.map(day => (<td>{day.date.getMonth() === monthValue ? (
+                <a {...{ href: `?day=${getFormattedDate(day.date)}` }}>
+                  <time {...getAttributes(day)}>&nbsp;</time>
+                </a>) : ''}</td>))}
             </tr>
           ))}
         </tbody>

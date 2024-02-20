@@ -2,6 +2,7 @@
 
 @import url('./colors.css');
 @import url('./palettes.css');
+@import url('./day-edit.css');
 
 :root {
   --default-font: "Inter", sans-serif;
@@ -67,6 +68,12 @@ button {
 
 .palette-name {
   margin: 0 auto 1rem;
+}
+
+.palette-name select {
+  border: 0;
+  cursor: pointer;
+  font-size: 1.4rem;
 }
 
 .palette-colors {

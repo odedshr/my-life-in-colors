@@ -1,35 +1,21 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { appendChild } from './view.html.js';
-import { addToDate, getFirstDayOfWeek, isFirstDateBeforeSecondDate } from '../utils/date-utils.js';
-import { getPalettes } from '../db.js';
-function onAddEntryButtonClicked() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return true;
-    });
+import { addToDate, getFormattedDate, getFirstDayOfWeek, isFirstDateBeforeSecondDate } from '../utils/date-utils.js';
+import { getDays, getPalettes, setCurrentPaletteId } from '../db.js';
+function getPaletteColors(palette) {
+    return palette.colors.reduce((acc, color) => { acc[color.name] = color.hex; return acc; }, {});
 }
-function pickAtRandom(list) {
-    return list[Math.floor(Math.random() * list.length)];
+function onSelectPalette(parent, palettes, paletteId) {
+    while (parent.firstChild) {
+        parent.firstChild.remove();
+    }
+    setCurrentPaletteId(paletteId);
+    palettes.current = palettes.map[paletteId];
+    refreshPage(parent, palettes);
 }
-function switchPage() {
-    document.title = 'My Life in Colors';
-    const palettes = getPalettes();
-    const palette = pickAtRandom(palettes);
-    // const palette = {
-    //   name: 'List Number 1',
-    //   colors: [
-    //     { name: 'Status 1', hex: '#22BA28' },
-    //     { name: 'Status 2', hex: '#EEDA23' },
-    //     { name: 'Status 3', hex: '#BA227D' },
-    //   ]
-    // };
+function getMonths(palette) {
+    const colors = getPaletteColors(palette);
+    const defaultColor = palette.colors[0];
+    const days = getDays();
     const months = [];
     for (let i = 0; i < 12; i++) {
         const firstDay = new Date(2024, i, 1);
@@ -39,13 +25,22 @@ function switchPage() {
         while (isFirstDateBeforeSecondDate(date, nextMonth)) {
             const week = [];
             for (let j = 0; j < 7; j++) {
-                week.push({ date, colorValue: pickAtRandom(palette.colors).hex });
+                const key = getFormattedDate(date);
+                week.push({ date, hex: days[key] ? colors[days[key].palette[palette.id]] : defaultColor.hex });
                 date = addToDate(date, 1);
             }
             month.weeks.push(week);
         }
         months.push(month);
     }
-    appendChild(document.body, { onAddEntryButtonClicked, palette, months });
+    return months;
+}
+function refreshPage(parent, palettes) {
+    const months = getMonths(palettes.current);
+    appendChild(parent, { onSelectPalette: (paletteId) => onSelectPalette(parent, palettes, paletteId), palettes, months });
+}
+function switchPage() {
+    document.title = 'My Life in Colors';
+    refreshPage(document.body, getPalettes());
 }
 export { switchPage };

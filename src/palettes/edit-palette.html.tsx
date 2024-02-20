@@ -45,7 +45,6 @@ const Element: ElementType<Props> = (props) => {
   };
 
   const onSubmit = (evt: Event) => {
-    console.log(props.palette);
     props.onSubmitted(props.palette);
     evt.preventDefault();
     return false;

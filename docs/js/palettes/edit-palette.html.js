@@ -31,7 +31,6 @@ const Element = (props) => {
         return false;
     };
     const onSubmit = (evt) => {
-        console.log(props.palette);
         props.onSubmitted(props.palette);
         evt.preventDefault();
         return false;

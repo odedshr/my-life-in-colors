@@ -1,21 +1,37 @@
 import { render } from 'nano-jsx';
-import { ElementType, Palette, Month } from '../types.js';
+import { ElementType, Palette, Palettes, Month } from '../types.js';
 import { Element as MonthView } from './month.html.js';
 
 type Props = {
-  onAddEntryButtonClicked: () => Promise<boolean>,
-  palette: Palette,
+  onSelectPalette: (paletteId: string) => void,
+  palettes: Palettes,
   months: Month[],
 }
 
+type Attributes = { value: string, selected?: string, };
+
+function getAttributes(palette: Palette, current: Palette) {
+  const attributes: Attributes = { value: palette.id };
+  if (palette.id === current.id) {
+    attributes.selected = "selected";
+  }
+  return attributes;
+}
+
 const Element: ElementType<Props> = (props) => {
-  let addEntryButton: HTMLButtonElement;
+  const currentPalette = props.palettes.current;
+
+  const onChange = (evt: Event) => evt.target && props.onSelectPalette((evt.target as HTMLSelectElement).value);
 
   return (<main class="page view">
     <header>
-      <h2 class="palette-name">{props.palette.name}</h2>
+      <h2 class="palette-name">
+        <select id="select-palette" onChange={onChange}>
+          {props.palettes.items.map(palette => (<option {...getAttributes(palette, currentPalette)}>{palette.name}</option>))}
+        </select>
+      </h2>
       <ul class="palette-colors">
-        {props.palette.colors.map(color => (
+        {currentPalette.colors.map(color => (
           <li class="color" {...{ style: `--color: ${color.hex}` }}>
             {color.name}
           </li>))}
@@ -32,8 +48,8 @@ const Element: ElementType<Props> = (props) => {
 
 function appendChild(parent: HTMLElement, props: Props) {
   render(<Element
-    onAddEntryButtonClicked={props.onAddEntryButtonClicked}
-    palette={props.palette}
+    onSelectPalette={props.onSelectPalette}
+    palettes={props.palettes}
     months={props.months} />, parent);
 }
 

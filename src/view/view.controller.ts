@@ -1,46 +1,60 @@
 import { appendChild } from './view.html.js';
-import { Day, Color } from '../types.js';
-import { addToDate, getFirstDayOfWeek, isFirstDateBeforeSecondDate } from '../utils/date-utils.js';
-import { getPalettes } from '../db.js';
+import { Palettes, Palette, Month } from '../types.js';
+import { addToDate, getFormattedDate, getFirstDayOfWeek, isFirstDateBeforeSecondDate } from '../utils/date-utils.js';
+import { getDays, getPalettes, setCurrentPaletteId } from '../db.js';
 
-async function onAddEntryButtonClicked(): Promise<boolean> {
-  return true;
+function getPaletteColors(palette: Palette) {
+  return palette.colors.reduce(
+    (acc, color) => { acc[color.name] = color.hex; return acc },
+    {} as { [key: string]: string }
+  );
 }
 
-function pickAtRandom(list: any[]) {
-  return list[Math.floor(Math.random() * list.length)];
+function onSelectPalette(parent: HTMLElement, palettes: Palettes, paletteId: string) {
+  while (parent.firstChild) {
+    parent.firstChild.remove();
+  }
+  setCurrentPaletteId(paletteId);
+  palettes.current = palettes.map[paletteId];
+  refreshPage(parent, palettes);
 }
-function switchPage() {
-  document.title = 'My Life in Colors';
-  const palettes = getPalettes();
-  const palette = pickAtRandom(palettes);
-  // const palette = {
-  //   name: 'List Number 1',
-  //   colors: [
-  //     { name: 'Status 1', hex: '#22BA28' },
-  //     { name: 'Status 2', hex: '#EEDA23' },
-  //     { name: 'Status 3', hex: '#BA227D' },
-  //   ]
-  // };
+
+function getMonths(palette: Palette) {
+  const colors = getPaletteColors(palette);
+  const defaultColor = palette.colors[0];
+  const days = getDays();
+
   const months = [];
   for (let i = 0; i < 12; i++) {
     const firstDay = new Date(2024, i, 1);
     const nextMonth = new Date(2024, i + 1, 1);
-    const month = { firstDay, weeks: [] as Day[][] };
+    const month: Month = { firstDay, weeks: [] };
     let date = getFirstDayOfWeek(firstDay);
 
     while (isFirstDateBeforeSecondDate(date, nextMonth)) {
-      const week: Day[] = [];
+      const week: { date: Date, hex: string }[] = [];
       for (let j = 0; j < 7; j++) {
-        week.push({ date, colorValue: pickAtRandom(palette.colors).hex })
+        const key = getFormattedDate(date);
+        week.push({ date, hex: days[key] ? colors[days[key].palette[palette.id]] : defaultColor.hex })
         date = addToDate(date, 1);
       }
       month.weeks.push(week);
     }
     months.push(month);
   }
+  return months
+}
 
-  appendChild(document.body, { onAddEntryButtonClicked, palette, months });
+function refreshPage(parent: HTMLElement, palettes: Palettes) {
+  const months = getMonths(palettes.current);
+
+  appendChild(parent, { onSelectPalette: (paletteId: string) => onSelectPalette(parent, palettes, paletteId), palettes, months });
+}
+
+function switchPage() {
+  document.title = 'My Life in Colors';
+
+  refreshPage(document.body, getPalettes());
 }
 
 export { switchPage };

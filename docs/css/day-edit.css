@@ -1,0 +1,39 @@
+.day-edit .palettes,
+.day-edit .colors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.day-edit input[type="radio"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  appearance: none;
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  /* Not removed via appearance */
+  margin: 0 1rem 0 0;
+  position: relative;
+}
+
+.day-edit input[type="radio"]:before {
+  background-color: var(--color);
+  border: var(--border-color);
+  content: " ";
+  cursor: pointer;
+  display: inline-block;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.day-edit input[type="radio"]:checked:after {
+  display: inline-block;
+  color: white;
+  content: "✔︎";
+  height: 0.5rem;
+  position: absolute;
+  width: 0.5rem;
+  left: 0rem;
+  padding: 0.1rem 0.2rem;
+  text-shadow: 0 0 0.5rem black;
+}
